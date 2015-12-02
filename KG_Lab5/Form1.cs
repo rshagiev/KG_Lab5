@@ -269,6 +269,8 @@ namespace KG_Lab5
                 Gl.glPushMatrix();
 
                 Gl.glTranslated(0, -1, -5);
+
+                Gl.glRotated(rot, 0, 1, 0);
                 Gl.glBegin(Gl.GL_QUADS);
 
                 Gl.glTexCoord2f(0, 0);
