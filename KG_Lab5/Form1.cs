@@ -111,13 +111,7 @@ namespace KG_Lab5
                     new byte [] {127,0,127,0 }
                 };
             Gl.glClearColor(255, 255, 255, 0);
-            if (WTF.Checked == false)
-            {
-                label1.Text = "";
-                Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
-            }
-            if (WTF.Checked == true)
-                label1.Text = "Так получится, если делать по методичке.";
+            
 
             if (!textureIsLoad)
             {
@@ -176,43 +170,49 @@ namespace KG_Lab5
             MlastY = rotateY;
         }
 
-        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // открываем окно выбора файла
             DialogResult res = openFileDialog1.ShowDialog(); // если файл выбран - и возвращен результат OK
             if (res == DialogResult.OK)
             {
-                width, height);
-                width, height);
+              
                 // создаем изображение с идентификатором imageId
-                Il.ilGenImages(1, out imageId); // делаем изображение текущим Il.ilBindImage(imageId);
+                Il.ilGenImages(1, out imageId); // делаем изображение текущим 
+                Il.ilBindImage(imageId);
                                                 // адрес изображения полученный с помощью окна выбора файла
                 string url = openFileDialog1.FileName; // пробуем загрузить изображение
                 if (Il.ilLoadImage(url))
                 {
                     // если загрузка прошла успешно
                     // сохраняем размеры изображения
-                    int width = Il.ilGetInteger(Il.IL_IMAGE_WIDTH); int height = Il.ilGetInteger(Il.IL_IMAGE_HEIGHT);
+                    int width = Il.ilGetInteger(Il.IL_IMAGE_WIDTH);
+                    int height = Il.ilGetInteger(Il.IL_IMAGE_HEIGHT);
                     // определяем число бит на пиксель
                     int bitspp = Il.ilGetInteger(Il.IL_IMAGE_BITS_PER_PIXEL);
-                    switch (bitspp) // в зависимости от полученного результата {
+                    switch (bitspp) // в зависимости от полученного результата 
+                    {
 // создаем текстуру используя режим GL_RGB или GL_RGBA
-case 24:
-                        mGlTextureObject = MakeGlTexture(Gl.GL_RGB, Il.ilGetData(),
-                                        break;
+                        case 24:
+                        mGlTextureObject = MakeGlTexture(Gl.GL_RGB, Il.ilGetData(), width, height);
+                         break;
                     case 32:
-                        mGlTextureObject = MakeGlTexture(Gl.GL_RGBA, Il.ilGetData(), break;
+                        mGlTextureObject = MakeGlTexture(Gl.GL_RGBA, Il.ilGetData(), width, height);
+                         break;
                     }
                     // активируем флаг, сигнализирующий загрузку текстуры
                     textureIsLoad = true;
-                    // очищаем память Il.ilDeleteImages(1, ref imageId);
+                    // очищаем память 
+                    Il.ilDeleteImages(1, ref imageId);
                 }
             }
         }
 
         private static uint MakeGlTexture(int Format, IntPtr pixels, int w, int h)
         {
+            // идентификатор текстурного объекта
             uint texObject;
+            // генерируем текстурный объект
             Gl.glGenTextures(1, out texObject);
             // устанавливаем режим упаковки пикселей
             Gl.glPixelStorei(Gl.GL_UNPACK_ALIGNMENT, 1);
@@ -230,8 +230,9 @@ case 24:
                     Gl.glTexImage2D(Gl.GL_TEXTURE_2D, 0, Gl.GL_RGBA, w, h, 0, Gl.GL_RGBA,
                     Gl.GL_UNSIGNED_BYTE, pixels); break;
             }
+            // возвращаем идентификатор текстурного объекта
             return texObject;
-        }
+    }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -240,160 +241,63 @@ case 24:
                 Application.Exit();
         }
 
-        private void DrawFigure()
-        {
-            int faceCount = 20; //количество граней      
 
-
-            //массив координат вершин
-            float[][] vertices;
-            vertices = new float[12][]
-            {
-               new float [] {0, 1, 0},
-                new float [] { 0.951f,0.5f, -0.309f},
-                new float [] { 0.587f, 0.5f, 0.809f},
-                new float [] { -0.587f, 0.5f, 0.809f},
-                new float [] {-0.951f, 0.5f, -0.309f},
-                new float [] { 0, 0.5f, -1},
-                new float [] { 0.951f, -0.5f, 0.309f},
-                new float [] { 0, -0.5f, 1},
-                new float [] { -0.951f, -0.5f, 0.309f},
-                new float [] { -0.587f, -0.5f, -0.809f},
-                new float [] { 0.587f, -0.5f, -0.809f},
-                new float [] { 0, -1, 0},
-
-            };
-            //массив координат граней
-            int[,] faces;
-            faces = new int[,]
-            {
-                {0,2,1},
-                {0,3,2},
-                {0,4,3},
-                {0,5,4},
-                {0,1,5},
-                {1,2,6},
-                {2,7,6},
-                {2,3,7},
-                {3,8,7},
-                {3,4,8},
-                {4,9,8},
-                {4,5,9},
-                {5,10,9},
-                {5,1,10},
-                {1,6,10},
-                {7,11,6},
-                {7,8,11},
-                {9,11,8},
-                {9,10,11},
-                {10,6,11},
-
-            };
-
-
-            //массив цветов граней
-            byte[][] faceColors;
-            faceColors = new byte[20][]
-            {
-                new byte [] {127, 0, 0, 0},
-                new byte [] {127, 32, 0, 0},
-                new byte [] {0, 127, 0, 0},
-                new byte [] {0, 0, 127, 0},
-                new byte [] {127, 32, 127, 0},
-                new byte [] {64, 0, 127, 0},
-                new byte [] {127, 127, 0, 0},
-                new byte [] {0, 127, 127, 0},
-                new byte [] {127, 0, 127, 0},
-                new byte [] {64, 127, 0, 0},
-                new byte [] {64, 32, 64, 0},
-                new byte [] {64, 0, 64, 0},
-                new byte [] {0, 32, 0, 0},
-                new byte [] {127, 64, 0, 0},
-                new byte [] {0, 64, 64, 0},
-                new byte [] {64, 127, 0, 0},
-                new byte [] {64, 32, 64, 0},
-                new byte [] {64, 0, 32, 0},
-                new byte [] {64, 64, 64, 0},
-                new byte [] {64, 0, 64, 0},
-            };
-
-            Gl.glClearColor(255, 255, 255, 1); // цвет очиcтки окна
-            Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
-
-            // включение режима отбраковки невидимых граней 
-            Gl.glEnable(Gl.GL_CULL_FACE);
-            Gl.glCullFace(Gl.GL_BACK);
-            Gl.glFrontFace(Gl.GL_CCW);
-            Gl.glEnable(Gl.GL_DEPTH_TEST);
-
-            Gl.glPushMatrix();
-
-            // поворот объекта 
-            Gl.glRotatef(rotateX, 1, 0, 0);
-            Gl.glRotatef(rotateY, 0, 1, 0);
-            float ScaleKof = 0.5f;
-            // масштабирование
-            Gl.glScalef(ScaleKof, ScaleKof, ScaleKof);
-
-            Gl.glBegin(Gl.GL_TRIANGLES);
-            for (int face = 0; face < faceCount; face++)
-            {
-                if (face != 0 || !textureIsLoad)
-                //if ( !textureIsLoad)
-                {
-                    Gl.glColor4bv(faceColors[face]);
-                    for (int i = 0; i < 3; i++)
-                    {
-                        int vertexIndex = faces[face, i];
-                        Gl.glVertex3fv(vertices[vertexIndex]);
-                    }
-                }
-            }
-            Gl.glEnd();
-
-            //если текстура загружена
-            if (textureIsLoad) // наклабываем на все
-            {
-                //включаем режим текстурирования
-                Gl.glEnable(Gl.GL_TEXTURE_2D);
-                //включаем режим текстурирования, указывая индификатор mGlTextureObject
-                Gl.glBindTexture(Gl.GL_TEXTURE_2D, mGlTextureObject);
-
-                Gl.glBegin(Gl.GL_TRIANGLES); // обход вершин треугольниками
-                //установка сообветствующих текстурных координат и координат фигуры
-                /* for (int face = 0; face < faceCount; face++)
-                 {
-                      Gl.glTexCoord2f(0, 0);
-                 Gl.glVertex3fv(vertices[faces[face, 0]]);
-
-                 Gl.glTexCoord2f(1, 0);
-                 Gl.glVertex3fv(vertices[faces[face, 1]]);
-
-                 Gl.glTexCoord2f(0.5f, 1);
-                 Gl.glVertex3fv(vertices[faces[face, 2]]);
-                 }*/
-                Gl.glTexCoord2f(0, 0);
-                Gl.glVertex3fv(vertices[faces[0, 0]]);
-
-                Gl.glTexCoord2f(1, 0);
-                Gl.glVertex3fv(vertices[faces[0, 1]]);
-
-                Gl.glTexCoord2f(0.5f, 1);
-                Gl.glVertex3fv(vertices[faces[0, 2]]);
-                Gl.glEnd();
-
-            }
-
-            Gl.glDisable(Gl.GL_TEXTURE_2D);
-
-            Gl.glPopMatrix();
-            // завершаем рисование  
-            Gl.glFlush();
-            AnT.Invalidate();
-        }
         private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
 
         }
+
+        private void DrawTexture()
+        {
+            if (textureIsLoad)
+            {
+                Gl.glDisable(Gl.GL_CULL_FACE);
+
+                rot++;
+
+                if (rot > 360)
+                    rot = 0;
+
+                Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
+                Gl.glClearColor(255, 255, 255, 1);
+
+                Gl.glLoadIdentity();
+
+                Gl.glEnable(Gl.GL_TEXTURE_2D);
+                Gl.glBindTexture(Gl.GL_TEXTURE_2D, mGlTextureObject);
+
+                Gl.glPushMatrix();
+
+                Gl.glTranslated(0, -1, -5);
+                Gl.glBegin(Gl.GL_QUADS);
+
+                Gl.glTexCoord2f(0, 0);
+                Gl.glVertex3d(0, 0, 0);
+                Gl.glTexCoord2f(0, 1);
+                Gl.glVertex3d(0, 1, 0);
+                Gl.glTexCoord2f(1, 1);
+                Gl.glVertex3d(1, 1, 0);
+                Gl.glTexCoord2f(1, 0);
+                Gl.glVertex3d(1, 0, 0);
+
+                Gl.glEnd();
+
+                Gl.glBegin(Gl.GL_TRIANGLES);
+                Gl.glTexCoord2f(1, 0);
+                Gl.glVertex3d(1, 1, 0);
+                Gl.glTexCoord2f(0.5f, 1);
+                Gl.glVertex3d(0.5, 2, 0);
+                Gl.glTexCoord2f(0, 0);
+                Gl.glVertex3d(0, 1, 0);
+                Gl.glEnd();
+
+                Gl.glPopMatrix();
+                Gl.glDisable(Gl.GL_TEXTURE_2D);
+
+                AnT.Invalidate();
+                    
+            }
+        }
+
     }
 }
