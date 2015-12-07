@@ -31,7 +31,6 @@
 \\Mac\Home\Documents\Visual Studio 2015\Projects\KG_Lab5\KG_Lab5\bin\Debug\Tao.Platform.Windows.xml
 \\Mac\Home\Documents\Visual Studio 2015\Projects\KG_Lab5\KG_Lab5\bin\Debug\Tao.Platform.X11.xml
 \\Mac\Home\Documents\Visual Studio 2015\Projects\KG_Lab5\KG_Lab5\bin\Debug\Tao.Sdl.xml
-\\Mac\Home\Documents\Visual Studio 2015\Projects\KG_Lab5\KG_Lab5\obj\Debug\KG_Lab5.csprojResolveAssemblyReference.cache
 \\Mac\Home\Documents\Visual Studio 2015\Projects\KG_Lab5\KG_Lab5\obj\Debug\KG_Lab5.Form1.resources
 \\Mac\Home\Documents\Visual Studio 2015\Projects\KG_Lab5\KG_Lab5\obj\Debug\KG_Lab5.Properties.Resources.resources
 \\Mac\Home\Documents\Visual Studio 2015\Projects\KG_Lab5\KG_Lab5\obj\Debug\KG_Lab5.csproj.GenerateResource.Cache
